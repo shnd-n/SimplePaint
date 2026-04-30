@@ -15,6 +15,7 @@ namespace SimplePaint
             Rectangle,
             Circle
         }
+        private float zoomScale = 1.0f; // 현재 배율 (1.0 = 100%)
 
         // 2. 그리기 관련 멤버 변수
         private Bitmap canvasBitmap;           // 실제 그림이 저장되는 비트맵
@@ -32,6 +33,8 @@ namespace SimplePaint
         public Form1()
         {
             InitializeComponent();
+            
+            picCanvas.MouseWheel += PicCanvas_MouseWheel;
 
             // 1. PictureBox 크기와 동일한 비트맵(도화지) 생성
             canvasBitmap = new Bitmap(picCanvas.Width, picCanvas.Height);
@@ -68,11 +71,18 @@ namespace SimplePaint
             trbLineWidth.Value = 2;          // 초기 두께 값
             trbLineWidth.ValueChanged += trbLineWidth_ValueChanged;
         }
-
+        private Point GetCorrectedPoint(MouseEventArgs e)
+        {
+            // 현재 마우스 위치(e.X, e.Y)를 배율(zoomScale)로 나누어 실제 비트맵 좌표를 구함
+            return new Point(
+                (int)(e.X / zoomScale),
+                (int)(e.Y / zoomScale)
+            );
+        }
         private void picCanvas_MouseDown(object sender, MouseEventArgs e)
         {
             isDrawing = true;             // 드래그시작
-            startPoint = e.Location;      // 시작점저장
+            startPoint = GetCorrectedPoint(e);      // 시작점저장 e.location
         }
 
         private void picCanvas_MouseMove(object sender, MouseEventArgs e)
@@ -81,7 +91,7 @@ namespace SimplePaint
             if (!isDrawing) return;
 
             // 2. 현재 마우스 좌표를 끝점(endPoint)으로 갱신
-            endPoint = e.Location;
+            endPoint = GetCorrectedPoint(e);
 
             // 3. PictureBox 무효화 (Paint 이벤트를 호출하여 미리보기 선을 그림)
             picCanvas.Invalidate();
@@ -94,7 +104,7 @@ namespace SimplePaint
 
             // 2. 드래그 종료 상태로 변경 및 최종 위치 저장
             isDrawing = false;
-            endPoint = e.Location;
+            endPoint = GetCorrectedPoint(e);
 
             // 3. 실제 비트맵(도화지)에 도형 그리기 확정
             using (Pen pen = new Pen(currentColor, currentLineWidth))
@@ -250,6 +260,77 @@ namespace SimplePaint
                         MessageBox.Show($"저장 실패: {ex.Message}");
                     }
                 }
+            }
+        }
+
+        private void btnOpenFile_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Title = "이미지 불러오기";
+                openFileDialog.Filter = "이미지 파일 (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        // 1. 선택한 파일로부터 원본 이미지 로드
+                        using (Image loadedImage = Image.FromFile(openFileDialog.FileName))
+                        {
+                            // 2. 현재 PictureBox 크기에 맞는 새 비트맵 생성 (도화지 교체)
+                            // 만약 이미지 크기에 맞추고 싶다면 new Bitmap(loadedImage)를 사용하세요.
+                            Bitmap newCanvas = new Bitmap(picCanvas.Width, picCanvas.Height);
+
+                            using (Graphics g = Graphics.FromImage(newCanvas))
+                            {
+                                // 배경을 흰색으로 먼저 채우기 (투명 이미지 대비)
+                                g.Clear(Color.White);
+
+                                // 3. 이미지를 도화지 크기에 맞춰서 그리기
+                                g.DrawImage(loadedImage, 0, 0, picCanvas.Width, picCanvas.Height);
+                            }
+
+                            // 4. 기존 메모리 해제 후 교체
+                            if (canvasBitmap != null) canvasBitmap.Dispose();
+                            if (canvasGraphics != null) canvasGraphics.Dispose();
+
+                            canvasBitmap = newCanvas;
+                            canvasGraphics = Graphics.FromImage(canvasBitmap);
+                            canvasGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                            // 5. 화면 갱신
+                            picCanvas.Image = canvasBitmap;
+                        }
+
+                        MessageBox.Show("이미지를 성공적으로 불러왔습니다!");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"이미지를 불러오는 중 오류 발생: {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        private void PicCanvas_MouseWheel(object sender, MouseEventArgs e)
+        {
+            // 마우스 휠 방향에 따라 확대/축소 (델타값이 양수면 확대)
+            if (e.Delta > 0) zoomScale += 0.1f;
+            else zoomScale = Math.Max(0.1f, zoomScale - 0.1f); // 최소 10% 유지
+
+            ApplyZoom();
+        }
+
+        private void ApplyZoom()
+        {
+            // 원본 비트맵의 크기에 배율을 곱해서 PictureBox 크기를 변경
+            if (canvasBitmap != null)
+            {
+                picCanvas.Width = (int)(canvasBitmap.Width * zoomScale);
+                picCanvas.Height = (int)(canvasBitmap.Height * zoomScale);
+
+                // 그림을 늘려서 보여주도록 설정
+                picCanvas.SizeMode = PictureBoxSizeMode.StretchImage;
             }
         }
     }

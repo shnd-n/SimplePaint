@@ -41,11 +41,13 @@
             btnOpenFile = new Button();
             btnSaveFile = new Button();
             picCanvas = new PictureBox();
+            pnlPic = new Panel();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trbLineWidth).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picCanvas).BeginInit();
+            pnlPic.SuspendLayout();
             SuspendLayout();
             // 
             // lblAppName
@@ -158,6 +160,7 @@
             btnOpenFile.TabIndex = 5;
             btnOpenFile.Text = "열기";
             btnOpenFile.UseVisualStyleBackColor = false;
+            btnOpenFile.Click += btnOpenFile_Click;
             // 
             // btnSaveFile
             // 
@@ -174,7 +177,7 @@
             // picCanvas
             // 
             picCanvas.BackColor = Color.White;
-            picCanvas.Location = new Point(22, 160);
+            picCanvas.Location = new Point(0, 0);
             picCanvas.Name = "picCanvas";
             picCanvas.Size = new Size(656, 322);
             picCanvas.TabIndex = 7;
@@ -183,12 +186,21 @@
             picCanvas.MouseMove += picCanvas_MouseMove;
             picCanvas.MouseUp += picCanvas_MouseUp;
             // 
+            // pnlPic
+            // 
+            pnlPic.AutoScroll = true;
+            pnlPic.Controls.Add(picCanvas);
+            pnlPic.Location = new Point(22, 160);
+            pnlPic.Name = "pnlPic";
+            pnlPic.Size = new Size(656, 322);
+            pnlPic.TabIndex = 8;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(707, 494);
-            Controls.Add(picCanvas);
+            Controls.Add(pnlPic);
             Controls.Add(btnSaveFile);
             Controls.Add(btnOpenFile);
             Controls.Add(groupBox3);
@@ -203,6 +215,7 @@
             groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)trbLineWidth).EndInit();
             ((System.ComponentModel.ISupportInitialize)picCanvas).EndInit();
+            pnlPic.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -221,5 +234,6 @@
         private Button btnOpenFile;
         private Button btnSaveFile;
         private PictureBox picCanvas;
+        private Panel pnlPic;
     }
 }
