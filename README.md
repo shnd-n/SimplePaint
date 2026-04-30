@@ -16,6 +16,10 @@
   - Graphics.DrawLine, Graphics.DrawRectangle, Graphics.DrawEllipse를 활용하여 직선, 사각형, 원 그리기 기능 구현
   - cmbColor.SelectedIndexChanged를 활용하여 색상 변경 기능 구현
   - DashStyle.Dash를 활용하여 점선으로 미리보기 기능 구현
+  - saveFileDialog를 활용하여 파일 저장 대화상자 구현
+  - Bitmap.Save를 활용하여 3가지 포맷으로 저장 기능 구현 / jpg, png, bmp
+  - MessageBox.Show를 활용하여 저장 성공 여부 알림 기능 구현
+
 
 ## 실행 화면 (과제1)
 - 과제1 코드의 실행 스크린샷
@@ -65,7 +69,10 @@
 ![과제3 실행화면](img/3-4.png)
 
 - 과제 내용
-  - 
+  - 파일 저장을 위한 대화상자인 SaveFileDialog 사용
+  - 3가지 포맷으로 저장
 
 - 구현 내용과 기능 설명
-  - 
+  - saveFileDialog를 활용하여 파일 저장 대화상자 구현
+  - Bitmap.Save를 활용하여 3가지 포맷으로 저장 기능 구현 / jpg, png, bmp
+  - MessageBox.Show를 활용하여 저장 성공 여부 알림 기능 구현

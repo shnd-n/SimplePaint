@@ -208,6 +208,50 @@ namespace SimplePaint
             currentLineWidth = trbLineWidth.Value;
         }
 
+        private void btnSaveFile_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Title = "그림 저장하기";
+                // 사용자가 선택할 수 있는 3가지 확장자 설정
+                saveFileDialog.Filter = "PNG 파일 (*.png)|*.png|JPEG 파일 (*.jpg)|*.jpg|Bitmap 파일 (*.bmp)|*.bmp";
+                saveFileDialog.DefaultExt = "png";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        string extension = System.IO.Path.GetExtension(saveFileDialog.FileName).ToLower();
+                        System.Drawing.Imaging.ImageFormat format = System.Drawing.Imaging.ImageFormat.Png;
+
+                        // 확장자에 따라 저장 포맷 결정
+                        switch (extension)
+                        {
+                            case ".jpg":
+                            case ".jpeg":
+                                format = System.Drawing.Imaging.ImageFormat.Jpeg;
+                                break;
+                            case ".bmp":
+                                format = System.Drawing.Imaging.ImageFormat.Bmp;
+                                break;
+                            case ".png":
+                            default:
+                                format = System.Drawing.Imaging.ImageFormat.Png;
+                                break;
+                        }
+
+                        // 선택한 포맷으로 저장
+                        canvasBitmap.Save(saveFileDialog.FileName, format);
+
+                        MessageBox.Show($"{extension.ToUpper().TrimStart('.')} 형식으로 저장되었습니다!", "알림");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"저장 실패: {ex.Message}");
+                    }
+                }
+            }
+        }
     }
 
 
