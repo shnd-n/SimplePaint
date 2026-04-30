@@ -1,7 +1,8 @@
+# (C# 코딩) SimplePaint
 
 ## 개요
 - C# 프로그래밍 학습
-- 1줄 소개: 메세지를 입력하고 이를 로그에 기록하는 메신저 프로그램
+- 1줄 소개: 그림판 프로그램 구현
 - 사용한 플랫폼:
   -C#, .NET Windows Forms, Visual Studio, GitHub
 - 사용한 컨트롤:
@@ -10,7 +11,11 @@
   - GroupBox를 활용하여 도형선택, 색상선택, 선굵기 선택 기능을 구분
   - TrackBar를 활용하여 선굵기 선택 기능 구현
   - ComboBox를 활용하여 색상선택 기능 구현
-
+  - Bitmap과 Graphics를 활용하여 마우스 드래그를 이용한 그림 그리기 기능 구현
+  - TracBar.ValueChanged를 활용하여 선굵기 변경 기능 구현
+  - Graphics.DrawLine, Graphics.DrawRectangle, Graphics.DrawEllipse를 활용하여 직선, 사각형, 원 그리기 기능 구현
+  - cmbColor.SelectedIndexChanged를 활용하여 색상 변경 기능 구현
+  - DashStyle.Dash를 활용하여 점선으로 미리보기 기능 구현
 
 ## 실행 화면 (과제1)
 - 과제1 코드의 실행 스크린샷
@@ -37,14 +42,18 @@
 ![과제2 실행화면](img/2-1.png)
 ![과제2 실행화면](img/2-2.png)
 ![과제2 실행화면](img/2-3.png)
+![과제2 실행화면](img/2-4.png)
 
 - 과제 내용
-  - 폴더 선택 기능과 파일 리스트 기능 구현 (색상 구분 표시)
-  - 양쪽 폴더의 파일 표시
+  - 마우스 드래그를 이용한 그림 그리기 기능 구현
+  - 직선, 사각형, 원그리기 기능구현
 
 - 구현 내용과 기능 설명
-  - FolderBrowserDialog를 활용하여 컴퓨터의 폴더를 선택할 수 있도록 구현
-  - dlg.SelectedPath를 활용하여 선택한 폴더의 경로를 가져오도록 구현
+  - Bitmap과 Graphics를 활용하여 마우스 드래그를 이용한 그림 그리기 기능 구현
+  - TracBar.ValueChanged를 활용하여 선굵기 변경 기능 구현
+  - Graphics.DrawLine, Graphics.DrawRectangle, Graphics.DrawEllipse를 활용하여 직선, 사각형, 원 그리기 기능 구현
+  - ComboBox.SelectedIndexChanged를 활용하여 색상 변경 기능 구현
+  - DashStyle.Dash를 활용하여 점선으로 미리보기 기능 구현
 
 
 ## 실행 화면 (과제3)
@@ -56,10 +65,7 @@
 ![과제3 실행화면](img/3-4.png)
 
 - 과제 내용
-  - 선택한 파일을 반대쪽 폴더로 복사하기
-  - 수정된 날짜 정보를 확인해서 “확인” 받아 진행 여부 결정하기
+  - 
 
 - 구현 내용과 기능 설명
-  - 선택한 파일을 반대쪽 폴더로 복사 기능 구현
-  - 수정된 날짜 정보를 확인해서 더 오래된 파일을 복사할 경우 "확인" 받아 진행 여부 결정 기능 구현
-  - LastWriteTime 속성을 활용하여 파일의 수정된 날짜 정보를 확인하도록 구현
+  - 

@@ -81,6 +81,7 @@
             btnCircle.Text = "원";
             btnCircle.TextAlign = ContentAlignment.BottomCenter;
             btnCircle.UseVisualStyleBackColor = true;
+            btnCircle.Click += btnCircle_Click;
             // 
             // btnRectangle
             // 
@@ -93,6 +94,7 @@
             btnRectangle.Text = "사각형";
             btnRectangle.TextAlign = ContentAlignment.BottomCenter;
             btnRectangle.UseVisualStyleBackColor = true;
+            btnRectangle.Click += btnRectangle_Click;
             // 
             // btnLine
             // 
@@ -106,6 +108,7 @@
             btnLine.Text = "직선";
             btnLine.TextAlign = ContentAlignment.BottomCenter;
             btnLine.UseVisualStyleBackColor = true;
+            btnLine.Click += btnLine_Click;
             // 
             // cmbColor
             // 
@@ -115,6 +118,7 @@
             cmbColor.Name = "cmbColor";
             cmbColor.Size = new Size(88, 23);
             cmbColor.TabIndex = 2;
+            cmbColor.SelectedIndexChanged += cmbColor_SelectedIndexChanged;
             // 
             // groupBox2
             // 
@@ -142,6 +146,7 @@
             trbLineWidth.Name = "trbLineWidth";
             trbLineWidth.Size = new Size(167, 45);
             trbLineWidth.TabIndex = 0;
+            trbLineWidth.ValueChanged += trbLineWidth_ValueChanged;
             // 
             // btnOpenFile
             // 
@@ -173,6 +178,9 @@
             picCanvas.Size = new Size(656, 322);
             picCanvas.TabIndex = 7;
             picCanvas.TabStop = false;
+            picCanvas.MouseDown += picCanvas_MouseDown;
+            picCanvas.MouseMove += picCanvas_MouseMove;
+            picCanvas.MouseUp += picCanvas_MouseUp;
             // 
             // Form1
             // 
