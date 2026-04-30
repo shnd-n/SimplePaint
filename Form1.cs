@@ -267,47 +267,32 @@ namespace SimplePaint
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.Title = "이미지 불러오기";
-                openFileDialog.Filter = "이미지 파일 (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp";
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    try
-                    {
-                        // 1. 선택한 파일로부터 원본 이미지 로드
-                        using (Image loadedImage = Image.FromFile(openFileDialog.FileName))
-                        {
-                            // 2. 현재 PictureBox 크기에 맞는 새 비트맵 생성 (도화지 교체)
-                            // 만약 이미지 크기에 맞추고 싶다면 new Bitmap(loadedImage)를 사용하세요.
-                            Bitmap newCanvas = new Bitmap(picCanvas.Width, picCanvas.Height);
+                    // 기존 이미지 메모리 해제
+                    if (canvasBitmap != null) canvasBitmap.Dispose();
 
-                            using (Graphics g = Graphics.FromImage(newCanvas))
-                            {
-                                // 배경을 흰색으로 먼저 채우기 (투명 이미지 대비)
-                                g.Clear(Color.White);
+                    // 1. 파일에서 이미지 로드
+                    Image loadedImage = Image.FromFile(openFileDialog.FileName);
 
-                                // 3. 이미지를 도화지 크기에 맞춰서 그리기
-                                g.DrawImage(loadedImage, 0, 0, picCanvas.Width, picCanvas.Height);
-                            }
+                    // 2. 새로운 비트맵 생성 (이미지 원본 크기로)
+                    canvasBitmap = new Bitmap(loadedImage);
+                    loadedImage.Dispose(); // 원본 파일 연결 끊기
 
-                            // 4. 기존 메모리 해제 후 교체
-                            if (canvasBitmap != null) canvasBitmap.Dispose();
-                            if (canvasGraphics != null) canvasGraphics.Dispose();
+                    // 3. PictureBox 크기를 비트맵 크기와 동일하게 설정 (이게 핵심!)
+                    picCanvas.Size = canvasBitmap.Size;
 
-                            canvasBitmap = newCanvas;
-                            canvasGraphics = Graphics.FromImage(canvasBitmap);
-                            canvasGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                    // 4. Graphics 객체 갱신
+                    canvasGraphics = Graphics.FromImage(canvasBitmap);
+                    canvasGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-                            // 5. 화면 갱신
-                            picCanvas.Image = canvasBitmap;
-                        }
+                    // 5. 화면에 연결
+                    picCanvas.Image = canvasBitmap;
 
-                        MessageBox.Show("이미지를 성공적으로 불러왔습니다!");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"이미지를 불러오는 중 오류 발생: {ex.Message}");
-                    }
+                    // 6. 좌표 초기화
+                    picCanvas.Location = new Point(0, 0);
                 }
             }
         }
